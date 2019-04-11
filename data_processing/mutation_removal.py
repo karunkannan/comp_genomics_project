@@ -1,16 +1,25 @@
 import pandas as pd
 import json
+import os
 
 
 def get_input():
     use_col = ['Hugo_Symbol', 'Entrez_Gene_Id', 'Chromosome', 'Start_Position', 'End_Position', 'Variant_Type',
                'Reference_Allele', 'Tumor_Seq_Allele2', 'Gene', 'case_id']
-    raw_maf_file = open(".././data/TCGA.BRCA.varscan.6c93f518-1956-4435-9806-37185266d248.DR-10.0.somatic.maf")
 
+    maf_filename = os.path.join('comp_genomics_project',
+                                '../data/TCGA.BRCA.varscan.6c93f518-1956-4435-9806-37185266d248.DR-10.0.somatic.maf')
+    maf_filename = os.path.abspath(os.path.realpath(maf_filename))
+
+    raw_maf_file = open(maf_filename)
     maf_df = pd.read_csv(raw_maf_file, sep='\t', skiprows=5, usecols=use_col)
+
     maf_df['location'] = maf_df['Chromosome'] + maf_df['Start_Position'].astype(str)
 
-    with open(".././data/cases.2019-04-09.json") as clinical_file:
+    clin_filename = os.path.join('comp_genomics_project',
+                                 '../data/cases.2019-04-09.json')
+    clin_filename = os.path.abspath(os.path.realpath(clin_filename))
+    with open(clin_filename) as clinical_file:
         clinical_data = json.load(clinical_file)
 
     clin_list = []
