@@ -6,11 +6,11 @@ def get_input():
 
     use_col=['Hugo_Symbol', 'Entrez_Gene_Id', 'Chromosome', 'Start_Position', 'End_Position', 'Variant_Type',
              'Reference_Allele', 'Tumor_Seq_Allele2', 'Gene', 'case_id']
-    raw_maf_file = open("./data/TCGA.BRCA.varscan.6c93f518-1956-4435-9806-37185266d248.DR-10.0.somatic.maf")
+    raw_maf_file = open(".././data/TCGA.BRCA.varscan.6c93f518-1956-4435-9806-37185266d248.DR-10.0.somatic.maf")
 
     maf_df = pd.read_csv(raw_maf_file, sep='\t', skiprows=5, usecols=use_col)
 
-    with open("./data/cases.2019-04-09.json") as clinical_file:
+    with open(".././data/cases.2019-04-09.json") as clinical_file:
         clinical_data = json.load(clinical_file)
 
     clin_list = []
@@ -35,7 +35,6 @@ def create_mutation_df(maf_df):
     gene_ids = maf_df['Gene'].unique()
     case_ids = maf_df['case_id'].unique()
 
-    print(gene_ids)
     case_list = []
     for case in case_ids:
         case_dict = {'case_id': case}
