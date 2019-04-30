@@ -81,7 +81,7 @@ def create_filtered_file(directory):
 
     csv_df = pd.merge(mut_df, clc_df, on='case_id', how='inner')
 
-    csv_df.to_csv(directory + "/TCGA_BRCA_loc_mutf_test.csv", sep=',')
+    csv_df.to_csv(directory + "/TCGA_BRCA_loc_mutf.csv", sep=',')
 
     return 0
 
@@ -95,7 +95,7 @@ def create_full_file(directory):
 
     csv_df = pd.merge(mut_df, clc_df, on='case_id', how='inner')
 
-    csv_df.to_csv(directory + "/TCGA_BRCA_loc_mut_test.csv", sep=',')
+    csv_df.to_csv(directory + "/TCGA_BRCA_loc_mut.csv", sep=',')
 
     return 0
 
@@ -142,7 +142,6 @@ def process_clinical_data(directory):
     clin_data['ajcc_metastasis_pathologic_pm'] = clin_data['ajcc_metastasis_pathologic_pm'].map(
         lambda x: meta_pm_map[x])
 
-    print(clin_data['ajcc_pathologic_tumor_stage'].unique())
     clin_data['ajcc_pathologic_tumor_stage'] = clin_data['ajcc_pathologic_tumor_stage'].replace(
         ['[Not Available]', '[Discrepancy]'], 'Stage X')
     tumor_stage_map = {'Stage X': 0, 'Stage I': 1, 'Stage IA': 2, 'Stage IB': 3, 'Stage II': 4, 'Stage IIA': 5,
@@ -176,11 +175,12 @@ def process_clinical_data(directory):
 
 def main():
     parser = argparse.ArgumentParser(description="Process Command line variables")
-    parser.add_argument("--dir", nargs=1)
+    parser.add_argument("--data_dir", nargs=1)
     args = parser.parse_args()
-    directory = args.dir[0]
+    directory = args.data_dir[0]
     create_filtered_file(directory)
     create_full_file(directory)
+    process_clinical_data(directory)
     return 0
 
 

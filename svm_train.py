@@ -93,6 +93,7 @@ def gauss_svm_pipe(x_train, y_train, cmax, lGmin, k, fig_dir):
 
 def plot_vals(x, y, results, xlabel, ylabel, title, fp_name, directory):
     """Create 3d plot of the accuracy of the training models and save it out"""
+    plt.clf()
     X, Y = np.meshgrid(x,y)
     Z = results.reshape(X.shape)
     fig = plt.figure()
@@ -105,7 +106,6 @@ def plot_vals(x, y, results, xlabel, ylabel, title, fp_name, directory):
     ax.set_zlabel('Accuracy')
     ax.set_title(title)
     fig.colorbar(surf, shrink=0.5, aspect=5)
-    plt.show()
     plt.savefig(directory + "/" + fp_name + ".png")
     return None
 
