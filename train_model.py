@@ -1,4 +1,5 @@
 import svm_train
+import rf
 import argparse
 
 
@@ -12,6 +13,9 @@ def main():
 
     svm_train.train_linear_svm(data_dir, results_dir)
     svm_train.train_gauss_svm(data_dir, results_dir)
+    rf.train_all_data(data_dir, results_dir)
+    rf.train_variance_filter(data_dir, results_dir)
+    rf.train_corr_filter(data_dir, results_dir)
     return 0
 
 
