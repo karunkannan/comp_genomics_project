@@ -16,6 +16,8 @@ def main():
     svm_train.predict_gauss_svm(data_dir, results_dir)
     GWAS_plot.GWAS_plot(data_dir, results_dir)
     rf.test_variance_filter(data_dir, results_dir)
+    rf.test_all_data(data_dir, results_dir)
+    rf.test_corr_filter(data_dir, results_dir)
     return 0
 
 

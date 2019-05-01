@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier as rf
+from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
 import pickle
 
@@ -14,10 +15,15 @@ def train(X_train, Y_train, X_test, Y_test, fig_name):
     param = np.arange(1, 101)
     scores = []
     for i in param:
-        clf = rf(n_estimators=i)
-        clf.fit(X_train, Y_train)
-        s = clf.score(X_test, Y_test)
-        scores.append(s)
+        kf = KFold(n_splits=5)
+        s = 0
+        for train_idx, test_idx in kf.split(X_train):
+            fold_train, fold_test = X_train[train_idx], X_train[test_idx]
+            lab_train, lab_test = Y_train[train_idx], Y_train[test_idx]
+            clf = rf(n_estimators=i)
+            clf.fit(fold_train, lab_train)
+            s += clf.score(fold_test, lab_test)
+        scores.append(float(s/5))
     n_estimators = (param[int(np.argmax(scores))], max(scores))
     plt.figure()
     plt.scatter(param, scores)
@@ -30,10 +36,15 @@ def train(X_train, Y_train, X_test, Y_test, fig_name):
     param = np.arange(1, 101)
     scores = []
     for i in param:
-        clf = rf(max_depth=i)
-        clf.fit(X_train, Y_train)
-        s = clf.score(X_test, Y_test)
-        scores.append(s)
+        kf = KFold(n_splits=5)
+        s = 0
+        for train_idx, test_idx in kf.split(X_train):
+            fold_train, fold_test = X_train[train_idx], X_train[test_idx]
+            lab_train, lab_test = Y_train[train_idx], Y_train[test_idx]
+            clf = rf(max_depth=i)
+            clf.fit(fold_train, lab_train)
+            s += clf.score(fold_test, lab_test)
+        scores.append(float(s/5))
     max_depth = (param[int(np.argmax(scores))], max(scores))
     plt.figure()
     plt.scatter(param, scores)
@@ -46,10 +57,15 @@ def train(X_train, Y_train, X_test, Y_test, fig_name):
     param = np.arange(1, 101)
     scores = []
     for i in param:
-        clf = rf(n_estimators=i)
-        clf.fit(X_train, Y_train)
-        s = clf.score(X_test, Y_test)
-        scores.append(s)
+        kf = KFold(n_splits=5)
+        s = 0
+        for train_idx, test_idx in kf.split(X_train):
+            fold_train, fold_test = X_train[train_idx], X_train[test_idx]
+            lab_train, lab_test = Y_train[train_idx], Y_train[test_idx]
+            clf = rf(min_samples_leaf=i)
+            clf.fit(fold_train, lab_train)
+            s += clf.score(fold_test, lab_test)
+        scores.append(float(s/5))
     min_samples_leaf = (param[int(np.argmax(scores))], max(scores))
     plt.figure()
     plt.scatter(param, scores)
@@ -186,7 +202,7 @@ def train_all_data(data_dir, results_dir):
     with open('{}rf_all_data_Y_test.pkl'.format(results_dir), 'wb') as f:
         pickle.dump(Y_test, f)
 
-def test_variance_filter(data_dir, results_dir): 
+def test_all_data(data_dir, results_dir): 
     data_dir = '{}/'.format(data_dir)
     results_dir = '{}/'.format(results_dir)
     with open('{}rf_all_data.pkl'.format(results_dir), 'rb') as f:
@@ -223,7 +239,7 @@ def train_corr_filter(data_dir, results_dir):
     with open('{}rf_corr_filter_Y_test.pkl'.format(results_dir), 'wb') as f:
         pickle.dump(Y_test, f)
 
-def test_variance_filter(data_dir, results_dir): 
+def test_corr_filter(data_dir, results_dir): 
     data_dir = '{}/'.format(data_dir)
     results_dir = '{}/'.format(results_dir)
     with open('{}rf_corr_filter.pkl'.format(results_dir), 'rb') as f:
